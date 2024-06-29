@@ -50,6 +50,12 @@
 
 #define DISABLE_TT_SAVE_ADDR 0x8054913C
 
+#define TF_MUSIC_DELAY_ADDR_1 0x80711fe8
+#define TF_MUSIC_DELAY_ADDR_2 0x80712024
+#define TF_MUSIC_DELAY_ADDR_3 0x8071207c
+#define TF_MUSIC_DELAY_ADDR_4 0x807120b8
+#define TF_MUSIC_RESET_ADDR 0x80719920
+
 #endif
 
 #ifdef RMCE
@@ -85,6 +91,12 @@
 
 #define DISABLE_TT_SAVE_ADDR 0x80543C00
 
+#define TF_MUSIC_DELAY_ADDR_1 0x8070a544
+#define TF_MUSIC_DELAY_ADDR_2 0x8070a580
+#define TF_MUSIC_DELAY_ADDR_3 0x8070a5d8
+#define TF_MUSIC_DELAY_ADDR_4 0x8070a614
+#define TF_MUSIC_RESET_ADDR 0x80711a54
+
 #endif
 
 #ifdef RMCJ
@@ -119,6 +131,12 @@
 #define MATCH_MAKE_REGION_ADDR_8 0x806596EC
 
 #define DISABLE_TT_SAVE_ADDR 0x80548ABC
+
+#define TF_MUSIC_DELAY_ADDR_1 0x80711654
+#define TF_MUSIC_DELAY_ADDR_2 0x80711690
+#define TF_MUSIC_DELAY_ADDR_3 0x807116e8
+#define TF_MUSIC_DELAY_ADDR_4 0x80711724
+#define TF_MUSIC_RESET_ADDR 0x80718f8c
 
 #endif
 
@@ -233,6 +251,11 @@ void u32ToBytes(unsigned char *mem, unsigned int val){
     *(mem + 1) = ((val >> 16) & 0xFF);
     *(mem + 2) = ((val >> 8) & 0xFF);
     *(mem + 3) = (val & 0xFF);
+}
+
+void u16ToBytes(unsigned char *mem, unsigned int val) {
+    *mem = (val >> 8);
+    *(mem + 1) = (val & 0xFF);
 }
 
 unsigned int bytesToU32(unsigned char *mem){
@@ -531,6 +554,15 @@ void __main(void){
         u32ToBytes((void*)UNLOCK_EVERY_THING_ADDR, 0x38600001);
         ICInvalidateRange((void*)UNLOCK_EVERY_THING_ADDR, 4);
     }
+
+    // TF music related patches
+    // Disable Toad's Factory Music Delay by CLF78 - https://mariokartwii.com/showthread.php?tid=1844
+    u16ToBytes((void*)TF_MUSIC_DELAY_ADDR_1, 0x4800);
+    u16ToBytes((void*)TF_MUSIC_DELAY_ADDR_2, 0x4800);
+    u16ToBytes((void*)TF_MUSIC_DELAY_ADDR_3, 0x4800);
+    u16ToBytes((void*)TF_MUSIC_DELAY_ADDR_4, 0x4800);
+    // Disable Toad's Factory Music Reset by _tZ (acaruso) & CLF78 - https://mariokartwii.com/showthread.php?tid=1810
+    u32ToBytes((void*)TF_MUSIC_RESET_ADDR, 0x48000010);
 }
 
 unsigned char dvdIsFileExist(const char *path){
