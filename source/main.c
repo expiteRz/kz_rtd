@@ -56,6 +56,12 @@
 #define TF_MUSIC_DELAY_ADDR_4 0x807120b8
 #define TF_MUSIC_RESET_ADDR 0x80719920
 
+#define FAST_MENU_TRANS_ADDR_1 0x8038900C
+#define FAST_MENU_TRANS_ADDR_2 0x80896830
+#define FAST_MENU_TRANS_ADDR_3 0x80635670
+
+#define PAUSE_AT_START_ADDR 0x80856A28
+
 #endif
 
 #ifdef RMCE
@@ -97,6 +103,12 @@
 #define TF_MUSIC_DELAY_ADDR_4 0x8070a614
 #define TF_MUSIC_RESET_ADDR 0x80711a54
 
+#define FAST_MENU_TRANS_ADDR_1 0x80384C84
+#define FAST_MENU_TRANS_ADDR_2 0x808901B8
+#define FAST_MENU_TRANS_ADDR_3 0x806047D8
+
+#define PAUSE_AT_START_ADDR 0x80834F98
+
 #endif
 
 #ifdef RMCJ
@@ -137,6 +149,12 @@
 #define TF_MUSIC_DELAY_ADDR_3 0x807116e8
 #define TF_MUSIC_DELAY_ADDR_4 0x80711724
 #define TF_MUSIC_RESET_ADDR 0x80718f8c
+
+#define FAST_MENU_TRANS_ADDR_1 0x8038898C
+#define FAST_MENU_TRANS_ADDR_2 0x80895E80
+#define FAST_MENU_TRANS_ADDR_3 0x80634DBC
+
+#define PAUSE_AT_START_ADDR 0x80856094
 
 #endif
 
@@ -399,6 +417,7 @@ void applyRiivolutionFlags(void){
         myGlobalVarPtr->matchMakeRegion = *((unsigned char*)((void*)0x80000CD0)) * 256;
         myGlobalVarPtr->matchMakeRegion += *((unsigned char*)((void*)0x80000CD1));
     }
+    myGlobalVarPtr->isFastMenuEnabled = *((unsigned char*)((void*)0x80000CD2));
 }
 
 //基本的にはデバッグ用
@@ -415,6 +434,14 @@ void setFlagsForNonRiivolution(void){
     if(myGlobalVarPtr->changeMatchMakeRegion){
         myGlobalVarPtr->matchMakeRegion = 1;
     }
+}
+
+// Fast Menu Transition
+void applyFastMenuTransition(void) {
+    // Faster Menu Navigation by east - https://mariokartwii.com/showthread.php?tid=389
+    u32ToBytes((void*)FAST_MENU_TRANS_ADDR_1, 0x00000000);
+    u32ToBytes((void*)FAST_MENU_TRANS_ADDR_2, 0x00000000);
+    u32ToBytes((void*)FAST_MENU_TRANS_ADDR_3, 0x38000000);
 }
 
 unsigned char isVWiiNand(void){
@@ -563,6 +590,11 @@ void __main(void){
     u16ToBytes((void*)TF_MUSIC_DELAY_ADDR_4, 0x4800);
     // Disable Toad's Factory Music Reset by _tZ (acaruso) & CLF78 - https://mariokartwii.com/showthread.php?tid=1810
     u32ToBytes((void*)TF_MUSIC_RESET_ADDR, 0x48000010);
+
+    if (myGlobalVarPtr->isFastMenuEnabled) applyFastMenuTransition();
+
+    // Allow pausing before the race starts by Gaberboo (One-lined by Sponge) - https://mariokartwii.com/showthread.php?tid=2108
+    u32ToBytes((void*)PAUSE_AT_START_ADDR, 0x48000050);
 }
 
 unsigned char dvdIsFileExist(const char *path){

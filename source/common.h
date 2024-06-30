@@ -63,6 +63,7 @@ typedef struct{
     void *mem2Heap;
     int padHookInstallTimer;
     unsigned char alreadyInstalledPadHook;
+    unsigned char isFastMenuEnabled;
 }myGlobalVarStruct;
 
 typedef struct{
