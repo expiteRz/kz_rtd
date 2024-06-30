@@ -1,3 +1,5 @@
+A fork of [kz-rtd](https://github.com/kazuki-4ys/kz_rtd) to implement the additional patches for a personal reason.
+
 # KZ-RTD
 
 Source code of [KZ-RTD](https://wiki.tockdom.com/wiki/KZ_Random_Texture_Distribution)
@@ -35,5 +37,11 @@ Source code of [KZ-RTD](https://wiki.tockdom.com/wiki/KZ_Random_Texture_Distribu
 [Track Music SpeedUp on Final Lap](https://mariokartwii.com/showthread.php?tid=1948) by Melg, MrBean and CLF78.
 
 [USB GCN Adapter Support](https://github.com/Chadderz121/wup-028-bslug) by Chadderz.
+
+[Disable Toad's Factory Music Delay](https://mariokartwii.com/showthread.php?tid=1844) by CLF78.
+
+[Disable Toad's Factory Music Reset](https://mariokartwii.com/showthread.php?tid=1810) by _tZ and CLF78.
+
+[Allow pausing before the race starts](https://mariokartwii.com/showthread.php?tid=2108) by Gaberboo (one-lined by Sponge).
 
 [mkw-sp](https://github.com/mkw-sp/mkw-sp) by mkw-sp contributors.
